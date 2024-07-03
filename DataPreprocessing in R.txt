@@ -1,0 +1,41 @@
+1.	Identify Missing Values:
+
+missing_values = dataset.isnull().sum()
+print(missing_values)
+
+2.	Handle Missing Values:
+
+numeric_columns_with_missing_values = ['Age', 'HasCrCard', 'IsActiveMember']
+imputer = SimpleImputer(strategy='mean')
+for col in numeric_columns_with_missing_values:
+    dataset[col] = imputer.fit_transform(dataset[[col]])
+Drop rows with missing values in categorical columns:
+dataset.dropna(subset=['Geography'], inplace=True)
+
+Drop the 's' column as it has many missing values
+dataset.drop(columns=['s'], inplace=True)
+
+3.	Encode Categorical Variables:
+
+encoder = OneHotEncoder(drop='first', sparse=False)
+encoded_features = encoder.fit_transform(dataset[['Geography', 'Gender']])
+encoded_column_names = encoder.get_feature_names_out(['Geography', 'Gender'])
+encoded_df = pd.DataFrame(encoded_features, columns=encoded_column_names)
+dataset_encoded = pd.concat([dataset, encoded_df], axis=1)
+dataset_encoded.drop(['Geography', 'Gender'], axis=1, inplace=True)
+
+4.	Convert Data Types:
+Convert non-finite values to NaN
+dataset['Age'] = pd.to_numeric(dataset['Age'], errors='coerce')
+
+Convert 'Age' column to integers, replacing NaN values with -1
+dataset['Age'] = dataset['Age'].fillna(-1).astype(int)
+
+5.	Detect and Handle Outliers:
+scaler = RobustScaler()  # or StandardScaler
+dataset[['CreditScore']] = scaler.fit_transform(dataset[['CreditScore']])
+
+6.	Explore Data and Relationships:
+print(dataset.describe())
+
+
