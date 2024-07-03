@@ -37,5 +37,3 @@ dataset[['CreditScore']] = scaler.fit_transform(dataset[['CreditScore']])
 
 6.	Explore Data and Relationships:
 print(dataset.describe())
-
-
